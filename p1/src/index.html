@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <script src="build/main.js"></script>
+    <link rel="icon" href="assets/logo.jpg">
+    <title>The Escapist</title>
+</head>
+
+<body>
+    <noscript>
+        You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root"></div>
+    <script>
+        // Elm app
+        var app = Elm.Main.init({
+            node: document.getElementById('root'),
+            flags: 1
+        });
+        // All music we used in the project are by CC0 license, and are acquired from OpenGameArt.org
+        // Edit the volume of the music
+        app.ports.changeVolume.subscribe(
+            x => {
+                try {
+                    let vol = x;
+                    var l = ["bigBall", "bigPaddle", "Dead", "Forted", "GameOver", "magma", "rock", "bgm", "paddleHit"];
+                    for (var id in l) {
+                        console.log("Change_Volume: ", l[id], vol);
+                        if (!(vol === null)) {
+                            let ele = document.getElementById(l[id]);
+                            ele.volume = ele.volume + vol;
+                        }
+                    }
+                } catch (error) {
+                }
+            }
+        )
+        //Change the state of the music
+        app.ports.sendChange.subscribe(
+            x => {
+                try {
+                    console.log("Pause: ", "bgm");
+                    ele = document.getElementById("bgm");
+                    if (!ele.paused || ele.currentTime) {
+                        ele.pause();
+                    } else { ele.play() }
+                } catch (error) {
+                }
+            }
+        )
+        //Play a sound effect
+        app.ports.playSFX.subscribe(
+            id => {
+                try {
+                    console.log("Start_Music: ", id);
+                    let ele = document.getElementById(id);
+                    if (id == "bgm") { ele.volume = 0.4 }
+                    if (id == "magma") { ele.volume = 0.8 }
+                    if (id == "GameOver") { ele.volume = 0.6 }
+                    ele.play();
+                }
+                catch (error) {
+                }
+            }
+        )
+    </script>
+</body>
+
+</html>
